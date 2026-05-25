@@ -1,6 +1,7 @@
 package com.ess.essreddit.services;
 
 import com.ess.essreddit.dto.RegisterRequest;
+import com.ess.essreddit.exceptions.EssRedditException;
 import com.ess.essreddit.model.NotificationEmail;
 import com.ess.essreddit.model.User;
 import com.ess.essreddit.model.VerificationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -50,4 +52,15 @@ public class AuthService {
         return UUID.randomUUID().toString();
     }
 
+    public void verifyToken(String token) {
+        Optional<VerificationToken> tokenObject = verificationTokenRepository.findByToken(token);
+        VerificationToken verifiedToken = tokenObject.orElseThrow(() -> new EssRedditException("Token cannot be found"));
+        fetchUserAndEnable(verifiedToken);
+    }
+
+    public void fetchUserAndEnable(VerificationToken verificationToken) {
+        User user = verificationToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 }
