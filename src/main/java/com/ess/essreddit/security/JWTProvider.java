@@ -22,10 +22,7 @@ public class JWTProvider {
     private Long jwtExpMS;
 
     public String generateToken(Authentication authentication) {
-        User principal = (User) authentication.getPrincipal();
-
-        assert principal != null;
-        return generateTokenWithUsername(principal.getUsername());
+        return generateTokenWithUsername(authentication.getName());
     }
 
     public String generateTokenWithUsername(String username) {
