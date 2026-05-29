@@ -1,5 +1,7 @@
 package com.ess.essreddit.services;
 
+import com.ess.essreddit.dto.AuthenticationResponse;
+import com.ess.essreddit.dto.LoginRequest;
 import com.ess.essreddit.dto.RegisterRequest;
 import com.ess.essreddit.exceptions.EssRedditException;
 import com.ess.essreddit.model.NotificationEmail;
@@ -7,8 +9,13 @@ import com.ess.essreddit.model.User;
 import com.ess.essreddit.model.VerificationToken;
 import com.ess.essreddit.repository.UserRepository;
 import com.ess.essreddit.repository.VerificationTokenRepository;
+import com.ess.essreddit.security.JWTProvider;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +30,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final EmailSenderService emailSenderService;
+    private final AuthenticationManager authenticationManager;
+    private final JWTProvider jwtProvider;
 
 
     @Transactional
@@ -62,5 +71,20 @@ public class AuthService {
         User user = verificationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+        ));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+
+        return AuthenticationResponse.builder()
+                .username(loginRequest.getUsername())
+                .authenticationToken(token)
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpMS()))
+                .build();
     }
 }

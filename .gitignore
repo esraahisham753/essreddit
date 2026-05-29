@@ -34,3 +34,4 @@ build/
 
 ### env vars ###
 .env
+/src/main/resources/keys

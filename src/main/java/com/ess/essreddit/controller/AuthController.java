@@ -1,5 +1,7 @@
 package com.ess.essreddit.controller;
 
+import com.ess.essreddit.dto.AuthenticationResponse;
+import com.ess.essreddit.dto.LoginRequest;
 import com.ess.essreddit.dto.RegisterRequest;
 import com.ess.essreddit.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -26,4 +28,10 @@ public class AuthController {
 
         return new ResponseEntity<>("User verified successfully", HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
+    }
+
 }

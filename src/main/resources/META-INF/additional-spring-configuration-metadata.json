@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "jwt.public.key",
+      "type": "java.lang.String",
+      "description": "Public key used for JWT verification."
+    },
+    {
+      "name": "jwt.private.key",
+      "type": "java.lang.String",
+      "description": "Private key used to encode the JWT token."
+    },
+    {
+      "name": "jwt.expiration.time",
+      "type": "java.lang.Long",
+      "description": "The expiration time for the jwt token in ms."
+    }
+  ]
+}
