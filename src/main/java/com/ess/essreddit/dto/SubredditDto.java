@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class SubredditDto {
-    private long id;
+    private Long id;
 
     @NotBlank(message = "Community name cannot be empty")
     private String name;
