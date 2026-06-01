@@ -49,4 +49,12 @@ public class SubredditService {
                 .map(subredditMapper::mapToSubredditDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public SubredditDto getSubredditById(Long id) {
+        Subreddit subreddit = subredditRepository.findById(id)
+                .orElseThrow(() -> new EssRedditException("Cannot find subreddit with id " + id));
+
+        return subredditMapper.mapToSubredditDto(subreddit);
+    }
 }

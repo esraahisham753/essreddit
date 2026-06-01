@@ -12,6 +12,7 @@ import com.ess.essreddit.repository.VerificationTokenRepository;
 import com.ess.essreddit.security.JWTProvider;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -86,5 +87,13 @@ public class AuthService {
                 .authenticationToken(token)
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpMS()))
                 .build();
+    }
+
+    public boolean isLoggedIn() {
+        Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authenticate instanceof AnonymousAuthenticationToken) return false;
+        assert authenticate != null;
+        return authenticate.isAuthenticated();
     }
 }
