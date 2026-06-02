@@ -10,7 +10,6 @@ import com.ess.essreddit.model.VerificationToken;
 import com.ess.essreddit.repository.UserRepository;
 import com.ess.essreddit.repository.VerificationTokenRepository;
 import com.ess.essreddit.security.JWTProvider;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -96,4 +96,21 @@ public class AuthService {
         assert authenticate != null;
         return authenticate.isAuthenticated();
     }
+
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (isLoggedIn()) {
+            assert authentication != null;
+            String username = authentication.getName();
+
+            return userRepository.findUserByUsername(username)
+                    .orElseThrow(() -> new EssRedditException("No user found with username: " + username));
+        }
+        else {
+            return null;
+        }
+    }
+
 }
