@@ -37,6 +37,7 @@ public class CommentService {
         sendNotificationEmail("The user " + authService.getCurrentUser().getUsername() + "commented on your post: " + post.getUrl());
 
         commentDto.setId(newComment.getId());
+        commentDto.setCreatedDate(newComment.getCreatedDate());
 
         return commentDto;
     }

@@ -12,7 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class CommentDto {
     private Long id;
-    private Long PostId;
+    private Long postId;
     private String username;
 
     @NotBlank
