@@ -1,5 +1,6 @@
 package com.ess.essreddit.controller;
 
+import com.ess.essreddit.dto.CommentDto;
 import com.ess.essreddit.dto.PostRequest;
 import com.ess.essreddit.dto.PostResponse;
 import com.ess.essreddit.services.PostService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/post")
+@RequestMapping("/api/posts")
 @AllArgsConstructor
 @Slf4j
 public class PostController {
@@ -28,6 +29,12 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(postService.getAllPosts());
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(postService.getCommentsByPostId(id));
     }
 
     @GetMapping("/{id}")

@@ -28,6 +28,7 @@ public abstract class PostMapper {
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "subreddit", source = "subreddit")
+    @Mapping(target = "postId", ignore = true)
     public abstract Post mapToPost(PostRequest postRequest, Subreddit subreddit, User user);
 
     @Mapping(target = "description", source = "post.description")
