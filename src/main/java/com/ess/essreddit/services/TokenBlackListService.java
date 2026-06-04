@@ -14,13 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TokenBlackListService {
     private final TokenBlackListRepository tokenBlackListRepository;
-    private final VerificationTokenRepository verificationTokenRepository;
 
     public void blackListToken(String token) {
-        TokenBlackList tokenBlackList = new TokenBlackList();
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
-                        .orElseThrow(() -> new EssRedditException("Token Not valid"));
-        tokenBlackList.setVerificationToken(verificationToken);
-        tokenBlackListRepository.save(tokenBlackList);
+        if (!tokenBlackListRepository.existsByToken(token)) {
+            TokenBlackList tokenBlackList = new TokenBlackList();
+            tokenBlackList.setToken(token);
+            tokenBlackListRepository.save(tokenBlackList);
+        }
+    }
+
+    public boolean isTokenBlackListed(String token) {
+        return tokenBlackListRepository.existsByToken(token);
     }
 }

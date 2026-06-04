@@ -14,7 +14,6 @@ public class TokenBlackList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tokenId", referencedColumnName = "tokenId")
-    private VerificationToken verificationToken;
+    @Column(unique = true, nullable = false, length = 2048)
+    private String token;
 }
