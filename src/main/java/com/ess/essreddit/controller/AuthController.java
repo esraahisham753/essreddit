@@ -4,6 +4,7 @@ import com.ess.essreddit.dto.AuthenticationResponse;
 import com.ess.essreddit.dto.LoginRequest;
 import com.ess.essreddit.dto.RefreshTokenRequest;
 import com.ess.essreddit.dto.RegisterRequest;
+import com.ess.essreddit.exceptions.EssRedditException;
 import com.ess.essreddit.services.AuthService;
 import com.ess.essreddit.services.RefreshTokenService;
 import com.ess.essreddit.services.TokenBlackListService;
@@ -57,7 +58,8 @@ public class AuthController {
             String token = authHeader.substring(7);
             tokenBlackListService.blackListToken(token);
         } else {
-            log.warn("Logout called without a bearer token authorization header");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Unauthorized access");
         }
         
         return ResponseEntity.status(HttpStatus.OK)

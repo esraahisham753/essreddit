@@ -32,7 +32,7 @@ public class JWTBlackListFilter extends OncePerRequestFilter {
             if (tokenBlackListService.isTokenBlackListed(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
-                response.getWriter().write("\"error\": \"Token invalidated\"");
+                response.getWriter().write("{\"error\": \"Token invalidated\"}");
 
                 return;
             }
