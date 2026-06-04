@@ -2,6 +2,7 @@ package com.ess.essreddit.services;
 
 import com.ess.essreddit.dto.AuthenticationResponse;
 import com.ess.essreddit.dto.LoginRequest;
+import com.ess.essreddit.dto.RefreshTokenRequest;
 import com.ess.essreddit.dto.RegisterRequest;
 import com.ess.essreddit.exceptions.EssRedditException;
 import com.ess.essreddit.model.NotificationEmail;
@@ -33,6 +34,7 @@ public class AuthService {
     private final EmailSenderService emailSenderService;
     private final AuthenticationManager authenticationManager;
     private final JWTProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
 
     @Transactional
@@ -85,6 +87,7 @@ public class AuthService {
         return AuthenticationResponse.builder()
                 .username(loginRequest.getUsername())
                 .authenticationToken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpMS()))
                 .build();
     }
@@ -110,6 +113,21 @@ public class AuthService {
         }
         else {
             return null;
+        }
+    }
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        if (refreshTokenService.validateToken(refreshTokenRequest.getRefreshToken())) {
+            String token = jwtProvider.generateTokenWithUsername(refreshTokenRequest.getUsername());
+
+            return AuthenticationResponse.builder()
+                    .refreshToken(refreshTokenRequest.getRefreshToken())
+                    .authenticationToken(token)
+                    .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpMS()))
+                    .username(refreshTokenRequest.getUsername())
+                    .build();
+        } else {
+            throw new EssRedditException("The refresh token is invalid");
         }
     }
 
