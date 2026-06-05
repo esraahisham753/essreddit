@@ -49,17 +49,23 @@ public class AuthController {
     }
 
     @Operation(summary = "Login with the username and password")
-    @ApiResponse(responseCode = "200", description = "user logged in successfully")
+    @ApiResponse(responseCode = "200", description = "User logged in successfully")
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
+    @Operation(summary = "Issue a new access token using a valid refresh token")
+    @ApiResponse(responseCode = "200", description = "Access token refreshed successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid or expired refresh token")
     @PostMapping("/refresh/token")
     public AuthenticationResponse refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
+    @Operation(summary = "Logout the current user and invalidate their tokens")
+    @ApiResponse(responseCode = "200", description = "Logged out successfully, refresh token deleted and access token blacklisted")
+    @ApiResponse(responseCode = "401", description = "Missing or malformed Authorization header")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest, HttpServletRequest request) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
@@ -72,7 +78,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Unauthorized access");
         }
-        
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Refresh token deleted successfully!");
     }
