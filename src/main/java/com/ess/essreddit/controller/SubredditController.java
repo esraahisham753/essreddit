@@ -2,6 +2,7 @@ package com.ess.essreddit.controller;
 
 import com.ess.essreddit.dto.SubredditDto;
 import com.ess.essreddit.services.SubredditService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/subreddits")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "Subreddit", description = "Subreddit management APIs")
 public class SubredditController {
     private final SubredditService subredditService;
 

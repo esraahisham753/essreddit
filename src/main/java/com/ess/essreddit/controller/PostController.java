@@ -4,6 +4,7 @@ import com.ess.essreddit.dto.CommentDto;
 import com.ess.essreddit.dto.PostRequest;
 import com.ess.essreddit.dto.PostResponse;
 import com.ess.essreddit.services.PostService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/posts")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "Post", description = "Post management APIs")
 public class PostController {
     private final PostService postService;
 

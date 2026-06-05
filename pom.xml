@@ -99,6 +99,11 @@
 			<artifactId>prettytime</artifactId>
 			<version>5.0.9.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>3.0.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

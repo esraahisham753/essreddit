@@ -2,6 +2,7 @@ package com.ess.essreddit.controller;
 
 import com.ess.essreddit.dto.CommentDto;
 import com.ess.essreddit.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/user")
+@Tag(name = "User", description = "User management APIs")
 public class UserController {
     private final UserService userService;
 
