@@ -79,6 +79,8 @@ public class SecurityConfig {
                        .permitAll()
                        .requestMatchers(HttpMethod.GET, "/api/posts")
                        .permitAll()
+                       .requestMatchers(HttpMethod.GET, "/api/subreddits")
+                       .permitAll()
                        .anyRequest()
                        .authenticated())
                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
